@@ -68,14 +68,22 @@ def build_feature_extractor():
 
 # Function to crop face center
 def crop_face_center(frame):
-    face_locations = face_recognition.face_locations(frame)
-    if len(face_locations) > 0:
-        face_location = face_locations[0]
+    # Load the pre-trained Haar Cascade model for face detection
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    
+    # Convert the frame to grayscale for face detection
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+    # Detect faces in the frame
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+    
+    if len(faces) > 0:
+        # Use the first detected face
+        (x, y, w, h) = faces[0]
+        face_image = frame[y:y+h, x:x+w]
+        return face_image
     else:
         return None
-    top, right, bottom, left = face_location
-    face_image = frame[top:bottom, left:right]
-    return face_image
 
 # Load the feature extractor
 feature_extractor = build_feature_extractor()
