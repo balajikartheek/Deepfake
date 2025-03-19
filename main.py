@@ -89,7 +89,7 @@ feature_extractor = build_feature_extractor()
 
 # Streamlit app
 def main():
-    st.title("Video Classification App")
+    st.title("DeepFake Detection")
     st.write("Upload a video to classify it as FAKE or REAL.")
 
     uploaded_file = st.file_uploader("Choose a video...", type=["mp4", "avi", "mov"])
