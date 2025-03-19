@@ -4,4 +4,3 @@ opencv-python
 face_recognition
 numpy
 imageio
-https://files.pythonhosted.org/packages/0e/ce/f8a3cff33ac03a8219768f0694c5d703c8e037e6aba2e865f9bae22ed63c/dlib-19.24.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
