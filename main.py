@@ -1,16 +1,13 @@
 import os
 import streamlit as st
-import urllib.request
 from tensorflow.keras.models import load_model
 from tensorflow import keras
 import face_recognition
 import cv2
 import numpy as np
-import imageio
+from tempfile import NamedTemporaryFile
 
 IMG_SIZE = 224
-BATCH_SIZE = 64
-EPOCHS = 100
 MAX_SEQ_LENGTH = 20
 NUM_FEATURES = 2048
 SEQ_LENGTH = 20
@@ -19,11 +16,11 @@ SEQ_LENGTH = 20
 def load_video(path, max_frames=0, resize=(IMG_SIZE, IMG_SIZE)):
     cap = cv2.VideoCapture(path)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    skip_frames_window = max(int(total_frames/SEQ_LENGTH), 1)
+    skip_frames_window = max(int(total_frames / SEQ_LENGTH), 1)
     frames = []
     try:
         for frame_cntr in range(SEQ_LENGTH):
-            cap.set(cv2.CAP_PROP_POS_FRAMES, frame_cntr*skip_frames_window)
+            cap.set(cv2.CAP_PROP_POS_FRAMES, frame_cntr * skip_frames_window)
             ret, frame = cap.read()
             if not ret:
                 break
@@ -90,23 +87,30 @@ def main():
 
     uploaded_file = st.file_uploader("Choose a video...", type=["mp4", "avi", "mov"])
     if uploaded_file is not None:
-        filename = secure_filename(uploaded_file.name)
-        with open(os.path.join("uploads", filename), "wb") as f:
-            f.write(uploaded_file.getbuffer())
-        st.success("Video successfully uploaded!")
-
+        # Display the video
         st.video(uploaded_file)
 
         if st.button("Predict"):
+            # Use a temporary file to process the video
+            with NamedTemporaryFile(delete=False, suffix=".mp4") as tmp_file:
+                tmp_file.write(uploaded_file.read())
+                tmp_file_path = tmp_file.name
+
+            # Load the sequence model
             sequence_model = load_model('./models/inceptionNet_model.h5')
             class_vocab = ['FAKE', 'REAL']
-            frames = load_video(os.path.join("uploads", filename))
+
+            # Load and process the video
+            frames = load_video(tmp_file_path)
             frame_features, frame_mask = prepare_single_video(frames)
+
+            # Make a prediction
             probabilities = sequence_model.predict([frame_features, frame_mask])[0]
             pred = probabilities.argmax()
             st.write(f"Prediction: {class_vocab[pred]}")
 
+            # Clean up the temporary file
+            os.unlink(tmp_file_path)
+
 if __name__ == "__main__":
-    if not os.path.exists("uploads"):
-        os.makedirs("uploads")
     main()
