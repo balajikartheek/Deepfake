@@ -1,7 +1,6 @@
 import os
 import streamlit as st
 import urllib.request
-from werkzeug.utils import secure_filename
 from tensorflow.keras.models import load_model
 from tensorflow import keras
 import face_recognition
