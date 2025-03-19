@@ -113,7 +113,6 @@ def main():
 
             # Make a prediction
             probabilities = sequence_model.predict([frame_features, frame_mask])[0]
-            st.write(probabilities)
             pred = probabilities.argmax()
             st.write(f"Prediction: {class_vocab[pred]}")
 
