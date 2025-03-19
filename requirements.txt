@@ -4,4 +4,4 @@ opencv-python
 face_recognition
 numpy
 imageio
-https://github.com/sachadee/Dlib-Wheels/raw/master/dlib-19.24.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+Dlib-Packages/dlib-19.22.99-cp39-cp39-win_amd64.whl
