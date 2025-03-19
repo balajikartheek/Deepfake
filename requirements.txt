@@ -1,8 +1,6 @@
 tensorflow
 streamlit
-urllib
-werkzeug
+opencv-python
 face_recognition
-cv2
 numpy
 imageio
