@@ -104,7 +104,7 @@ def main():
                 tmp_file_path = tmp_file.name
 
             # Load the sequence model
-            sequence_model = load_model('./models/inceptionNet_model.h5')
+            sequence_model = load_model('./models/mobileNet_model.h5')
             class_vocab = ['FAKE', 'REAL']
 
             # Load and process the video
