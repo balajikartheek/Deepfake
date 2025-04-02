@@ -54,25 +54,17 @@ def prepare_single_video(frames):
 
 # Function to extract features from Video Frames
 def build_feature_extractor():
-    # Using pretrained MobileNetV2 Model
-    feature_extractor = keras.applications.MobileNetV2(
+    feature_extractor = keras.applications.InceptionV3(
         weights="imagenet",
         include_top=False,
         pooling="avg",
-        input_shape=IMG_SHAPE,
+        input_shape=(IMG_SIZE, IMG_SIZE, 3),
     )
-
-    # Adding a Preprocessing layer in the Model
-    preprocess_input = keras.applications.mobilenet_v2.preprocess_input
-
+    preprocess_input = keras.applications.inception_v3.preprocess_input
     inputs = keras.Input((IMG_SIZE, IMG_SIZE, 3))
     preprocessed = preprocess_input(inputs)
-
     outputs = feature_extractor(preprocessed)
     return keras.Model(inputs, outputs, name="feature_extractor")
-
-
-feature_extractor = build_feature_extractor()
 
 
 # Function to crop face center
