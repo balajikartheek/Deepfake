@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 from tempfile import NamedTemporaryFile
 
-IMG_SIZE = 224
+IMG_SIZE = 260
 MAX_SEQ_LENGTH = 20
 NUM_FEATURES = 2048
 SEQ_LENGTH = 20
@@ -51,19 +51,29 @@ def prepare_single_video(frames):
     print("Completed preparing frames")
     return frame_features, frame_mask
 
-# Function to build feature extractor
+
+# Function to extract features from Video Frames
 def build_feature_extractor():
-    feature_extractor = keras.applications.InceptionV3(
+    # Using pretrained MobileNetV2 Model
+    feature_extractor = keras.applications.MobileNetV2(
         weights="imagenet",
         include_top=False,
         pooling="avg",
-        input_shape=(IMG_SIZE, IMG_SIZE, 3),
+        input_shape=IMG_SHAPE,
     )
-    preprocess_input = keras.applications.inception_v3.preprocess_input
-    inputs = keras.Input((IMG_SIZE, IMG_SIZE, 3))
+
+    # Adding a Preprocessing layer in the Model
+    preprocess_input = keras.applications.mobilenet_v2.preprocess_input
+
+    inputs = keras.Input(IMG_SHAPE)
     preprocessed = preprocess_input(inputs)
+
     outputs = feature_extractor(preprocessed)
     return keras.Model(inputs, outputs, name="feature_extractor")
+
+
+feature_extractor = build_feature_extractor()
+
 
 # Function to crop face center
 def crop_face_center(frame):
