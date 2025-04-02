@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 from tempfile import NamedTemporaryFile
 
-IMG_SIZE = 260
+IMG_SIZE = 224
 MAX_SEQ_LENGTH = 20
 NUM_FEATURES = 2048
 SEQ_LENGTH = 20
