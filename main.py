@@ -65,7 +65,7 @@ def build_feature_extractor():
     # Adding a Preprocessing layer in the Model
     preprocess_input = keras.applications.mobilenet_v2.preprocess_input
 
-    inputs = keras.Input(IMG_SHAPE)
+    inputs = keras.Input((IMG_SIZE, IMG_SIZE, 3))
     preprocessed = preprocess_input(inputs)
 
     outputs = feature_extractor(preprocessed)
